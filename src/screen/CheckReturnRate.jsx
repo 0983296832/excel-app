@@ -8,7 +8,7 @@
  */
 import React, { useEffect, useState } from "react";
 import * as xlsx from "xlsx";
-import { getSubstringAfterFirstLetter } from "../ultil";
+import { getMinAndMaxDates, getSubstringAfterFirstLetter } from "../ultil";
 import _ from "lodash";
 import TableExport from "../components/Table";
 import { Tabs } from "antd";
@@ -17,7 +17,7 @@ const CheckReturnRate = () => {
   const [data, setData] = useState([]);
   const [productData, setProductData] = useState([]);
   const [statData, setStatData] = useState([]);
-  const [total, setTotal] = useState({ order_fake: 0, total: 0, wait: 0 });
+  const [total, setTotal] = useState({ order_fake: 0, total: 0, wait: 0, date: "" });
 
   const [activetab, setActivetab] = useState(1);
   const [search, setSearch] = useState("");
@@ -90,7 +90,9 @@ const CheckReturnRate = () => {
       const new_stat_data = new_data.map((v) => ({
         p_name: v["Tên sản phẩm"],
         is_return:
-          (v["Đơn giao 1 phần"] && v["Tiền CoD"] <= 30000) || v["Trạng thái đơn hàng"] == "Đã đối soát công nợ trả hàng"
+          (v["Đơn giao 1 phần"] && v["Tiền CoD"] <= 30000) ||
+          v["Trạng thái đơn hàng"] == "Đã đối soát công nợ trả hàng" ||
+          (v["Trạng thái đơn hàng"] == "Đã đối soát" && v["Tiền CoD"] <= 30000 && v["Tiền CoD"] != 10000)
             ? true
             : false,
       }));
@@ -112,7 +114,7 @@ const CheckReturnRate = () => {
           }, [])
           .map((v) => ({ ...v, rate: ((v.return / v.quantity) * 100).toFixed(2) + "%" }))
       );
-      console.log(new_stat_data);
+
       const returnData = new_data.filter((v) =>
         [
           "Không giao được hàng",
@@ -127,6 +129,9 @@ const CheckReturnRate = () => {
         }, 0),
         total: new_data.length,
         wait: returnData,
+        date: `${getMinAndMaxDates(new_data?.map((v) => v["Thời gian tạo đơn"]))?.minDate} - ${
+          getMinAndMaxDates(new_data?.map((v) => v["Thời gian tạo đơn"])).maxDate
+        }`,
       });
     }
   }, [data?.length]);
@@ -255,6 +260,7 @@ const CheckReturnRate = () => {
             <p className="text-2xl">Tổng: {total.total}</p>
             <p className="text-2xl">Đơn gửi nhờ: {total.order_fake}</p>
             <p className="text-2xl">Đang dở: {total.wait}</p>
+            <p className="text-2xl">Tính từ ngày: {total.date}</p>
           </div>
         </div>
       )}

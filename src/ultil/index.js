@@ -111,7 +111,26 @@ function getNumberInParentheses(inputString) {
   return match ? parseInt(match[1], 10) : null;
 }
 
+function getMinAndMaxDates(dateArray) {
+  // Chuyển đổi chuỗi ngày thành đối tượng Date
+  var dateObjects = dateArray.map(function (dateString) {
+    return new Date(dateString);
+  });
 
+  // Sắp xếp mảng theo thứ tự tăng dần
+  dateObjects.sort(function (a, b) {
+    return a - b;
+  });
+
+  // Lấy ngày nhỏ nhất và lớn nhất
+  var minDate = dateObjects[0].toLocaleDateString("en-GB");
+  var maxDate = dateObjects[dateObjects.length - 1].toLocaleDateString("en-GB");
+
+  return {
+    minDate: minDate,
+    maxDate: maxDate,
+  };
+}
 
 export {
   convertToNoDiacriticAndUnderscore,
@@ -125,4 +144,5 @@ export {
   getCurrentTime,
   getNumberBeforeSpace,
   getNumberInParentheses,
+  getMinAndMaxDates,
 };

@@ -393,7 +393,7 @@ const OrderSheet = () => {
 
     const newUpdateData = [];
     new_edit.forEach((e) => {
-      const temp = new_order_data.filter((v) => v.product.toLowerCase().includes(e.p_name.toLowerCase()));
+      const temp = new_order_data.filter((v) => v.product.toLowerCase() == e.p_name.toLowerCase());
       if (temp?.length > 0) {
         newUpdateData.push(...temp.map((t) => ({ ...t, weight: e.weight })));
       }
