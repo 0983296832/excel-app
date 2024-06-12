@@ -17,7 +17,7 @@ const CheckReturnRate = () => {
   const [data, setData] = useState([]);
   const [productData, setProductData] = useState([]);
   const [statData, setStatData] = useState([]);
-  const [total, setTotal] = useState({ order_fake: 0, total: 0, wait: 0, date: "" });
+  const [total, setTotal] = useState({ order_fake: 0, total: 0, delivering: 0, undeliver: 0, date: "" });
 
   const [activetab, setActivetab] = useState(1);
   const [search, setSearch] = useState("");
@@ -115,20 +115,19 @@ const CheckReturnRate = () => {
           .map((v) => ({ ...v, rate: ((v.return / v.quantity) * 100).toFixed(2) + "%" }))
       );
 
-      const returnData = new_data.filter((v) =>
-        [
-          "Không giao được hàng",
-          "Delay giao hàng",
-          "Đã điều phối giao hàng/Đang giao hàng",
-          "Đã lấy hàng/Đã nhập kho",
-        ].includes(v["Trạng thái đơn hàng"])
+      const undeliver = new_data.filter((v) => ["Không giao được hàng"].includes(v["Trạng thái đơn hàng"])).length;
+      const delivering = new_data.filter((v) =>
+        ["Delay giao hàng", "Đã điều phối giao hàng/Đang giao hàng", "Đã lấy hàng/Đã nhập kho"].includes(
+          v["Trạng thái đơn hàng"]
+        )
       ).length;
       setTotal({
         order_fake: new_data.reduce((prev, curr) => {
           return prev + (curr["Tên sản phẩm"] ? 0 : 1);
         }, 0),
         total: new_data.length,
-        wait: returnData,
+        undeliver: undeliver,
+        delivering: delivering,
         date: `${getMinAndMaxDates(new_data?.map((v) => v["Thời gian tạo đơn"]))?.minDate} - ${
           getMinAndMaxDates(new_data?.map((v) => v["Thời gian tạo đơn"])).maxDate
         }`,
@@ -259,7 +258,8 @@ const CheckReturnRate = () => {
           <div>
             <p className="text-2xl">Tổng: {total.total}</p>
             <p className="text-2xl">Đơn gửi nhờ: {total.order_fake}</p>
-            <p className="text-2xl">Đang dở: {total.wait}</p>
+            <p className="text-2xl">Không giao đc hàng: {total.undeliver}</p>
+            <p className="text-2xl">Đang giao hàng: {total.delivering}</p>
             <p className="text-2xl">Tính từ ngày: {total.date}</p>
           </div>
         </div>
