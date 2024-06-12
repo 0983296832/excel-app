@@ -49,7 +49,6 @@ const CheckReturnProduct = () => {
       reader.readAsArrayBuffer(e.target.files[0]);
     }
   };
-  console.log(statisticData);
   const exportExcel = () => {
     const newData = _.cloneDeep(statisticData);
 
