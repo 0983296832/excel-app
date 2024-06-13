@@ -95,7 +95,9 @@ const CheckReturnRate = () => {
           (v["Trạng thái đơn hàng"] == "Đã đối soát" && v["Tiền CoD"] <= 30000 && v["Tiền CoD"] != 10000)
             ? true
             : false,
+        status: v["Trạng thái đơn hàng"],
       }));
+      console.log(new_stat_data);
       setStatData(
         new_stat_data
           .filter((v) => v.p_name)
@@ -106,9 +108,30 @@ const CheckReturnRate = () => {
                 p_name: curr.p_name || "hàng gửi nhờ",
                 quantity: 1 + prev[existPIdx].quantity,
                 return: curr.is_return ? prev[existPIdx].return + 1 : prev[existPIdx].return + 0,
+                undeliver:
+                  curr.status == "Không giao được hàng" ? prev[existPIdx].undeliver + 1 : prev[existPIdx].undeliver + 0,
+                delivering: [
+                  "Delay giao hàng",
+                  "Đã điều phối giao hàng/Đang giao hàng",
+                  "Đã lấy hàng/Đã nhập kho",
+                ].includes(curr.status)
+                  ? prev[existPIdx].delivering + 1
+                  : prev[existPIdx].delivering + 0,
               };
             } else {
-              prev.push({ p_name: curr.p_name, quantity: 1, return: curr.is_return ? 1 : 0 });
+              prev.push({
+                p_name: curr.p_name,
+                quantity: 1,
+                return: curr.is_return ? 1 : 0,
+                undeliver: curr.status == "Không giao được hàng" ? 1 : 0,
+                delivering: [
+                  "Delay giao hàng",
+                  "Đã điều phối giao hàng/Đang giao hàng",
+                  "Đã lấy hàng/Đã nhập kho",
+                ].includes(curr.status)
+                  ? 1
+                  : 0,
+              });
             }
             return prev;
           }, [])
@@ -134,6 +157,7 @@ const CheckReturnRate = () => {
       });
     }
   }, [data?.length]);
+  console.log(statData);
 
   const columns = [
     {
@@ -212,6 +236,18 @@ const CheckReturnRate = () => {
       key: "rate",
       render: (value) => <p className="text-base">{value}</p>,
     },
+    {
+      title: <p className="text-lg">Không giao đc hàng</p>,
+      dataIndex: "undeliver",
+      key: "undeliver",
+      render: (value) => <p className="text-base">{value}</p>,
+    },
+    {
+      title: <p className="text-lg">Đang giao hàng</p>,
+      dataIndex: "delivering",
+      key: "delivering",
+      render: (value) => <p className="text-base">{value}</p>,
+    },
   ];
 
   return (
@@ -250,8 +286,8 @@ const CheckReturnRate = () => {
         </div>
       )}
       {activetab == 2 && (
-        <div className="flex p-6 justify-between w-[700px]">
-          <div className="w-[400px]">
+        <div className="flex p-6 justify-between w-full">
+          <div className="w-[800px]">
             <TableExport data={statData} columns={columns1} />
           </div>
 

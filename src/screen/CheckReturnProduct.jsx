@@ -25,13 +25,13 @@ const CheckReturnProduct = () => {
   const selectOption = [
     { value: 1, label: "Khớp" },
     { value: 2, label: "Không khớp" },
-    { value: null, label: "Không có hàng" },
+    { value: -1, label: "Không có hàng" },
   ];
   const selectOptionFilter = [
     { value: 0, label: "Tất cả" },
     { value: 1, label: "Khớp" },
     { value: 2, label: "Không khớp" },
-    { value: null, label: "Không có hàng" },
+    { value: -1, label: "Không có hàng" },
   ];
 
   const handleFileUpload = (e) => {
