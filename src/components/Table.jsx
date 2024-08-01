@@ -10,6 +10,6 @@
 import { Table } from "antd";
 
 const TableExport = ({ data, columns, pagination = false }) => {
-  return <Table columns={columns} dataSource={data} pagination={pagination} rowHoverBg={"gray"} bordered />;
+  return <Table columns={columns} dataSource={data} pagination={pagination} rowHoverBg={"gray"} bordered/>;
 };
 export default TableExport;

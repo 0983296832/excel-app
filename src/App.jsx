@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs, ConfigProvider } from "antd";
 import Order from "./screen/Order";
 import Statistic from "./screen/Statistic";
@@ -8,6 +8,9 @@ import OrderSheet from "./screen/OrderSheet";
 import CheckDuplicate from "./screen/CheckReturnRate";
 import CheckReturnProduct from "./screen/CheckreturnProduct";
 import StatisticProduct from "./screen/StatisticProduct";
+import connectDB from "./database/connect";
+import * as Realm from "realm-web";
+import CheckDuplicatePhone from "./screen/CheckDuplicatePhone";
 
 function App() {
   const [activetab, setActivetab] = useState(1);
@@ -44,7 +47,15 @@ function App() {
       key: 7,
       label: "Thống kê sản phẩm",
     },
+    {
+      key: 8,
+      label: "Check trùng số điện thoại",
+    },
   ];
+
+  // useEffect(() => {
+  //   connectDB();
+  // });
 
   return (
     <ConfigProvider
@@ -67,6 +78,7 @@ function App() {
           {activetab == 5 && <CheckDuplicate />}
           {activetab == 6 && <CheckReturnProduct />}
           {activetab == 7 && <StatisticProduct />}
+          {activetab == 8 && <CheckDuplicatePhone />}
         </div>
       </div>
     </ConfigProvider>
