@@ -6,7 +6,7 @@ import Statistic from "./screen/Statistic";
 import ExportOrder from "./screen/ExportOrder";
 import OrderSheet from "./screen/OrderSheet";
 import CheckDuplicate from "./screen/CheckReturnRate";
-import CheckReturnProduct from "./screen/CheckreturnProduct";
+import CheckReturnProduct from "./screen/CheckreturnProduct.jsx";
 import StatisticProduct from "./screen/StatisticProduct";
 import connectDB from "./database/connect";
 import * as Realm from "realm-web";
