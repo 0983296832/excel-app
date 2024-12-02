@@ -157,7 +157,6 @@ const CheckReturnRate = () => {
       });
     }
   }, [data?.length]);
-  console.log(statData);
 
   const columns = [
     {

@@ -8,9 +8,8 @@ import OrderSheet from "./screen/OrderSheet";
 import CheckDuplicate from "./screen/CheckReturnRate";
 import CheckReturnProduct from "./screen/CheckReturnProduct.jsx";
 import StatisticProduct from "./screen/StatisticProduct";
-import connectDB from "./database/connect";
-import * as Realm from "realm-web";
 import CheckDuplicatePhone from "./screen/CheckDuplicatePhone";
+import CheckAdsResult from "./screen/CheckAdsResult.jsx";
 
 function App() {
   const [activetab, setActivetab] = useState(1);
@@ -51,6 +50,10 @@ function App() {
       key: 8,
       label: "Check trùng số điện thoại",
     },
+    {
+      key: 9,
+      label: "Kết quả chạy ADS",
+    },
   ];
 
   // useEffect(() => {
@@ -79,6 +82,7 @@ function App() {
           {activetab == 6 && <CheckReturnProduct />}
           {activetab == 7 && <StatisticProduct />}
           {activetab == 8 && <CheckDuplicatePhone />}
+          {activetab == 9 && <CheckAdsResult />}
         </div>
       </div>
     </ConfigProvider>

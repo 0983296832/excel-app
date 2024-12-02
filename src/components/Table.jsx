@@ -9,7 +9,9 @@
 // import React from 'react';
 import { Table } from "antd";
 
-const TableExport = ({ data, columns, pagination = false }) => {
-  return <Table columns={columns} dataSource={data} pagination={pagination} rowHoverBg={"gray"} bordered/>;
+const TableExport = ({ data, columns, pagination = false, summary }) => {
+  return (
+    <Table columns={columns} dataSource={data} pagination={pagination} rowHoverBg={"gray"} bordered summary={summary} />
+  );
 };
 export default TableExport;
