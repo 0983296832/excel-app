@@ -25,11 +25,11 @@ function Statistic() {
       value: 1,
       extra_options: [
         "Không nghe máy",
-        "Không nghe máy lần 1",
-        "Không nghe máy lần 2",
-        "Không nghe máy lần 3",
-        "Không nghe máy lần 4",
-        "Không nghe máy lần 5",
+        "Không nghe máy 1",
+        "Không nghe máy 2",
+        "Không nghe máy 3",
+        "Không nghe máy 4",
+        "Không nghe máy 5",
         "Hẹn gọi lại",
       ],
     },
@@ -43,6 +43,9 @@ function Statistic() {
         "Phát thành công",
         "Giao hàng - Có vấn đề",
         "Chưa phát được",
+        "Chuyển hoàn",
+        "COD-đã thu tiền",
+        "Phát hoàn thành công",
       ],
     },
     { label: "Đã hủy", value: 3, extra_options: ["Hủy đơn", "Sai số", "Khách - Yêu cầu hủy", "Huỷ vận đơn"] },
@@ -127,10 +130,45 @@ function Statistic() {
   useEffect(() => {
     if (data?.length) {
       const new_data = _.cloneDeep(data);
+      console.log("data", data);
+      // {
+      //   // Định nghĩa các nhóm trạng thái
+      //   const statusGroups = {
+      //     "Đã chốt": ["Dachot-henship", "Dachot", "Daguibuudien", "Chuaphatduoc"],
+      //     "Không nghe máy": [
+      //       "Khongnghemaylan1",
+      //       "Khongnghemaylan2",
+      //       "Khongnghemaylan3",
+      //       "Khongnghemaylan4",
+      //       "Khongnghemaylan5",
+      //     ],
+      //     "Đơn hủy": ["Saiso", "Huy DNX", "Yeucauhuy"],
+      //   };
+
+      //   // Tạo một đối tượng để lưu kết quả đếm
+      //   const result = {};
+
+      //   // Duyệt qua từng nhóm trạng thái
+      //   _.forEach(statusGroups, (statuses, groupName) => {
+      //     // Lọc các đối tượng theo nhóm trạng thái hiện tại
+      //     const filteredByGroup = _.filter(new_data, (item) => _.includes(statuses, item["Tình trạng"]));
+
+      //     // Đếm số lần xuất hiện của mỗi người trong các đối tượng đã lọc
+      //     const countByPerson = _.countBy(filteredByGroup, "Đơn hàng của");
+
+      //     // Lưu kết quả đếm vào đối tượng kết quả
+      //     result[groupName] = countByPerson;
+      //   });
+      // }
+
+      // {
+      //   const countByPerson = _.countBy(new_data, "Đơn hàng của");
+      // }
+
       if (filter.status) {
         const filterStatusValue = statusOptions.find((opt) => opt?.value == filter.status);
 
-        const newFilterData = new_data.filter((v) => filterStatusValue.extra_options.includes(v["Tình trạng_1"]));
+        const newFilterData = new_data.filter((v) => filterStatusValue.extra_options.includes(v["Tình trạng"]));
 
         const newStatisticData = statisticData.map((s) => {
           const totalGGOrder = newFilterData.reduce((prev, curr) => {
@@ -173,7 +211,6 @@ function Statistic() {
             hotline_sales: totalHotlineSales,
           };
         });
-
         setStatisticData(newStatisticData);
         setColumns([
           {

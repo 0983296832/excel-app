@@ -111,6 +111,18 @@ const Order = () => {
           return phones;
         };
 
+        const getDuplicatePhone = () => {
+          const listP = newJson.filter((p) => p["Sản phẩm"] == s.product_name);
+          const phones = _.map(listP, "Điện thoại khách");
+
+          // Đếm tần suất xuất hiện của mỗi số điện thoại
+          const phoneCounts = _.countBy(phones);
+
+          // Lọc ra các số điện thoại bị trùng (tần suất xuất hiện > 1)
+          const duplicatePhones = _.keys(_.pickBy(phoneCounts, (count) => count > 1));
+          return duplicatePhones;
+        };
+
         return {
           index,
           product_name: s.product_name,
@@ -119,8 +131,10 @@ const Order = () => {
           amount: totalAmount,
           checked: false,
           error: getPhoneOfErrorRow(),
+          duplicatePhones: getDuplicatePhone(),
         };
       });
+      console.log(newStatisticData);
 
       setStatisticData({ check: false, data: newStatisticData, uniq_p: uniqueP, clone_data: newStatisticData });
     }
@@ -220,6 +234,31 @@ const Order = () => {
         return (
           <div>
             {error.map((v) => (
+              <p
+                className="hover:text-blue-500 p-1 cursor-pointer"
+                onClick={() => {
+                  copyToClipboard(v, () => {
+                    messageApi.success("Đã copy");
+                  });
+                }}
+                key={v}
+              >
+                {v}
+              </p>
+            ))}
+          </div>
+        );
+      },
+    },
+    {
+      title: "Sđt trùng",
+      dataIndex: "duplicatePhones",
+      key: "duplicatePhones",
+      width: 150,
+      render: (_, { duplicatePhones }) => {
+        return (
+          <div>
+            {duplicatePhones.map((v) => (
               <p
                 className="hover:text-blue-500 p-1 cursor-pointer"
                 onClick={() => {
